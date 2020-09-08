@@ -569,14 +569,14 @@ Et la .... c'est le drame. Sa ne marche pas :(
 Le forum nous donne un indice:
 ![img mouettes](./screen/mouettes.png)
 
-Les numéro doivent etre inversé.
+Les numéros doivent etre inversé.
 
-le bon mot de passe est:
+Le bon mot de passe est:
 ```
 Publicspeakingisveryeasy.126241207201b2149opekmq426135
 ```
 
-### turtle
+### Turtle
 
 Une fois connecter sur l'user thor, on peux voir un ReadME et un fichier turtle.
 Le ReadMe nous donne le nom du prochain utilisateur, le turtle des déplacements.
