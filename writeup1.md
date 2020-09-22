@@ -4,7 +4,7 @@
 Une fois la VM lancer, on lance un scan de port afin de voir les services qui tourne
 
 ```
-$ nmap -sT -oA http-enum-results --script=http-enum  192.168.56.101
+$ nmap --script=http-enum 192.168.56.101 -Pn
 Starting Nmap 7.80 ( https://nmap.org ) at 2020-02-01 19:06 CET
 Nmap scan report for 192.168.56.101
 Host is up (0.00016s latency).
