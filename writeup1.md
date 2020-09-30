@@ -533,9 +533,11 @@ void phase_6(undefined4 param_1)
 La fonction attend 6 nombres. Elle est un peu complexe a comprendre.
 
 Nous avons 2 manières de résoudre cette phase:
- - On peux mettrent des breakpoints a chaque explode_bomb() afin de voir qu'est ce qui est attendu.
- - Bruteforcing
+ - On peux mettrent des breakpoints avant chaque explode_bomb() afin de voir qu'est ce qui est attendu.
+ - Bruteforce
 
+
+Bruteforce:
 Un moyen de trouver efficacement le password une fois que nous savons que nous devons trouver un code de 6 chiffres commencant par 4 et ne contenant jamais deux fois le meme chiffre, est de bruteforcer ce dernier. Le nombre de combinaisons possibles est de 15.000. 
 Il suffit alors de faire un petit script en bash pour proceder (voir /scripts/pwnthat, des explications sont indiquees en commentaire)
 
