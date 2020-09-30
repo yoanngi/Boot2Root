@@ -36,8 +36,7 @@ On peux voir quelque chose d'interessant ici :
 
 ![failled password](./screen/failedpassword.png)
 
-On va se connnecter sur le forum en tant que **lmezard** (Auteur du post) avec le mot de passe: **!q\]Ej?*5K5cy*AJ**
-*Attention: Le Readme va supprimé les étoiles*
+On va se connnecter sur le forum en tant que **lmezard** (Auteur du post) avec le mot de passe: `!q\]Ej?*5K5cy*AJ`
 
 L'authentification a reussi.
 
