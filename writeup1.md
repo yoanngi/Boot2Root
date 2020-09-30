@@ -1,7 +1,7 @@
 # Boot2Root
 
 ## Reconnaissance
-Une fois la VM lancer, on lance un scan de port afin de voir les services qui tourne
+Une fois la VM lancee , on lance un scan de port afin de voir les services qui tournent
 
 ```
 $ nmap --script=http-enum 192.168.56.101 -Pn
