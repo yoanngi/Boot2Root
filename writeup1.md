@@ -538,7 +538,7 @@ Le resultat est : 4 2 6 3 1 5
 
 **Phase 6 v2**
 
-Un moyen de trouver efficacement le password une fois que nous devons trouver un code de 6 chiffres commencant par 4 et ne contenant jamais
+Un moyen de trouver efficacement le password une fois que nous savons que nous devons trouver un code de 6 chiffres commencant par 4 et ne contenant jamais
 deux fois le meme chiffre, est de bruteforcer ce dernier. Le nombre de combinaisons possibles est de 15.000. 
 Il suffit alors de faire un petit script en bash pour proceder (voir /scripts/pwnthat, des explications sont indiquees en commentaire)
 
