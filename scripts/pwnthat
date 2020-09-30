@@ -1,0 +1,46 @@
+# Le script va tout simplement creer un fichier avec les mots de passes des
+# levels precedents auquel il ajoutera a chaque fois une nouvelle 
+# combinaison de 5 chiffres (5 chiffres car le fait que
+# le code contienne 6 chiffres, nous savons que le premier est '4')
+# en guise de 6eme code. 
+# Les 15.000 combinaisons sont split en 10 fichiers afin que cela soit
+# moins lourd a lire pour le script (et donc plus rapide). 
+# A chaque fois, la derniere ligne du fichiers "words" contenant les
+# mots de passe precedent est effacee, puis remplace par la nouvelle valeur
+# a tester. 
+# Il y a deux boucles : Une qui va lister chacun des 10 fichiers, et l'autre 
+# qui va lire et tester son contenu, ligne par ligne.
+
+# Lancer le script comme ceci : ./pwnthat | grep -A 1 "Congratulations"
+
+#!/bin/sh
+
+rm words 2>/dev/null
+echo "Public speaking is very easy." >> words
+echo "1 2 6 24 120 720" >> words
+echo "7 b 524" >> words
+echo "9" >> words
+echo "opekma" >> words
+echo "______" >> words
+
+mkdir comb_files 2>/dev/null
+sudo python3 getcombinations.py > combs
+rm -rf comb_files/*
+mv combs comb_files && cd comb_files
+split -l 1500 combs && mv combs .. && cd ..
+
+for file in comb_files/*; do
+	i=0
+	while [ $i -lt 1499 ]; do
+		sed -i '$ d' $file | tail -n 1 $file
+		sleep 0.005
+		sed -i '$ d' words
+		rm -rf sed*
+		tail -n 1 $file >> words
+		./bomb words | grep "Congratulations"
+		i=$(( i+1 ))
+	done
+	rm -rf $file
+done
+
+rm -rf words combs
